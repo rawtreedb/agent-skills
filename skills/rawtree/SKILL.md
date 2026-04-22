@@ -8,18 +8,13 @@ metadata:
 
 # RawTree
 
-The content below is copied from `backend/src/routes/docs.rs` (`plain_text_docs`).
-
 ## RAWTREE API — Agent-Friendly Analytics
 
-Base URL: `/v1`
+Base URL: `https://api.rawtree.com/v1`
 
 ### Machine-readable docs
 
-- OpenAPI spec (JSON): `GET /v1/openapi.json`
-- Swagger UI: `GET /docs`
-- This document: `GET /v1/docs`
-- AI plugin manifest: `GET /.well-known/ai-plugin.json`
+- OpenAPI spec (JSON): `GET https://api.rawtree.com/v1/openapi.json`
 
 ## AUTHENTICATION
 
