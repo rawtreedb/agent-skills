@@ -178,25 +178,25 @@ Insert modes for `POST /v1/tables/{table}`:
 
 ## Parameterized Queries
 
-Use `{param_name:Type}` syntax in SQL to define parameters.
+RawTree query requests accept `{"sql":"..."}` only. Treat parameterization as an application-level pattern, not a platform request-body feature.
 
-```sql
-SELECT * FROM events WHERE user = {user_id:String} LIMIT {n:UInt32}
-```
+Build the final SQL in code, then send it in the `sql` field.
 
-Parameter types must be valid RawTree types (see Supported Types below).
-
-In ad-hoc queries:
-
-- `POST /v1/query`
-- Body: `{"sql":"SELECT * FROM events WHERE user = {user_id:String}","params":{"user_id":"alice"}}`
-- CLI:
+Example (curl with app-provided values):
 
 ```bash
-rtree query "SELECT * FROM events WHERE user = {user_id:String}"
-```
+BASE_URL="https://api.rawtree.com"
+API_KEY="<rw_token>"
+USER_ID="alice"
+N="10"
 
-(params passed via the API body)
+SQL=$(printf "SELECT * FROM events WHERE user = '%s' LIMIT %s" "$USER_ID" "$N")
+
+curl -X POST "$BASE_URL/v1/query" \
+  -H "Authorization: Bearer $API_KEY" \
+  -H "Content-Type: application/json" \
+  -d "{\"sql\":\"$SQL\"}"
+```
 
 ## Supported Types
 
