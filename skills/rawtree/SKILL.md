@@ -8,7 +8,7 @@ metadata:
 
 # RawTree
 
-## RAWTREE API — Agent-Friendly Analytics
+## RawTree Api — Agent-Friendly Analytics
 
 Base URL: `https://api.rawtree.com/v1`
 
@@ -16,7 +16,7 @@ Base URL: `https://api.rawtree.com/v1`
 
 - OpenAPI spec (JSON): `GET https://api.rawtree.com/v1/openapi.json`
 
-## AUTHENTICATION
+## Authentication
 
 Sign in flow for users and agents:
 
@@ -34,7 +34,7 @@ Rules of thumb:
 - Use explicit API keys (`rw_...`) for programmatic API calls.
 - Query endpoints are read-only (SELECT-only validation).
 
-## CLI QUICK START
+## Cli Quick Start
 
 Install (recommended):
 
@@ -100,7 +100,7 @@ RAWTREE_PROJECT=analytics
 RAWTREE_ORG=team_alpha
 ```
 
-## CURL QUICK START
+## Curl Quick Start
 
 ```bash
 BASE_URL="https://api.rawtree.com"
@@ -124,7 +124,7 @@ curl -X POST "$BASE_URL/v1/query" \
   -d '{"sql":"SELECT event, count() FROM events GROUP BY event ORDER BY count() DESC"}'
 ```
 
-## API REFERENCE (AGENT-ORIENTED)
+## Api Reference (Agent-Oriented)
 
 ### Projects
 
@@ -176,7 +176,7 @@ Insert modes for `POST /v1/tables/{table}`:
 
 - `GET /health`
 
-## PARAMETERIZED QUERIES
+## Parameterized Queries
 
 Use `{param_name:Type}` syntax in SQL to define parameters.
 
@@ -184,7 +184,7 @@ Use `{param_name:Type}` syntax in SQL to define parameters.
 SELECT * FROM events WHERE user = {user_id:String} LIMIT {n:UInt32}
 ```
 
-Parameter types must be valid RawTree types (see SUPPORTED TYPES below).
+Parameter types must be valid RawTree types (see Supported Types below).
 
 In ad-hoc queries:
 
@@ -198,7 +198,7 @@ rtree query "SELECT * FROM events WHERE user = {user_id:String}"
 
 (params passed via the API body)
 
-## SUPPORTED TYPES (RawTree)
+## Supported Types
 
 ```text
 Integers:   UInt8, UInt16, UInt32, UInt64, UInt128, UInt256
@@ -232,7 +232,7 @@ Example:
 SELECT user::String, value::Float64, inserted_at::Date FROM events
 ```
 
-## QUERY TIPS
+## Query Tips
 
 - Only SELECT queries are allowed (read-only).
 - Standard SQL is supported.
@@ -245,7 +245,7 @@ SELECT id, count() FROM events GROUP BY id
 SELECT id, count() FROM events GROUP BY id ORDER BY count() DESC LIMIT 10
 ```
 
-## ERRORS
+## Errors
 
 All errors return: `{"error":"code","message":"...","hint":"..."}`
 The hint field contains actionable suggestions to fix the issue.
