@@ -20,9 +20,8 @@ Machine-readable docs:
   This document:       GET /v1/docs
   AI plugin manifest:  GET /.well-known/ai-plugin.json
 
-================================================================================
-AUTHENTICATION
-================================================================================
+## AUTHENTICATION
+
 
 Sign in flow for users and agents:
   1) Run: rtree login
@@ -37,9 +36,8 @@ Rules of thumb:
   - Use explicit API keys (rw_...) for programmatic API calls.
   - Query endpoints are read-only (SELECT-only validation).
 
-================================================================================
-CLI QUICK START
-================================================================================
+## CLI QUICK START
+
 
 Install (recommended):
   curl -sSf https://rawtree.com | sh
@@ -93,9 +91,8 @@ Agent-friendly flags and env:
   RAWTREE_PROJECT=analytics
   RAWTREE_ORG=team_alpha
 
-================================================================================
-CURL QUICK START
-================================================================================
+## CURL QUICK START
+
 
   BASE_URL="https://api.rawtree.com"
   # 1) Sign in and create key with CLI:
@@ -117,9 +114,8 @@ CURL QUICK START
     -H "Content-Type: application/json" \
     -d '{"sql":"SELECT event, count() FROM events GROUP BY event ORDER BY count() DESC"}'
 
-================================================================================
-API REFERENCE (AGENT-ORIENTED)
-================================================================================
+## API REFERENCE (AGENT-ORIENTED)
+
 
 Projects:
   GET    /v1/projects
@@ -164,9 +160,8 @@ API keys:
 Health:
   GET /health
 
-================================================================================
-PARAMETERIZED QUERIES
-================================================================================
+## PARAMETERIZED QUERIES
+
 
 Use {param_name:Type} syntax in SQL to define parameters.
 
@@ -181,9 +176,8 @@ In ad-hoc queries:
     rtree query "SELECT * FROM events WHERE user = {user_id:String}"
     (params passed via the API body)
 
-================================================================================
-SUPPORTED TYPES (RawTree)
-================================================================================
+## SUPPORTED TYPES (RawTree)
+
 
 Integers:   UInt8, UInt16, UInt32, UInt64, UInt128, UInt256
             Int8, Int16, Int32, Int64, Int128, Int256
@@ -209,9 +203,8 @@ When casting in queries, use standard RawTree functions or :: syntax:
 Example:
   SELECT user::String, value::Float64, inserted_at::Date FROM events
 
-================================================================================
-QUERY TIPS
-================================================================================
+## QUERY TIPS
+
 
   - Only SELECT queries are allowed (read-only).
   - Standard SQL is supported.
@@ -221,9 +214,8 @@ QUERY TIPS
       SELECT id, count() FROM events GROUP BY id
       SELECT id, count() FROM events GROUP BY id ORDER BY count() DESC LIMIT 10
 
-================================================================================
-ERRORS
-================================================================================
+## ERRORS
+
 
 All errors return: {"error":"code","message":"...","hint":"..."}
 The hint field contains actionable suggestions to fix the issue.
