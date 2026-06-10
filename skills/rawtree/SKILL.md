@@ -257,7 +257,6 @@ There are no indexes, primary keys, or materialized views to define. The engine 
 - Filter on bare columns so the auto-built primary key can prune: `WHERE user_id = 5`, `WHERE latency_ms > 1000`.
 - Do not wrap filter columns in functions (`WHERE toString(user_id) = '5'`); computed expressions cannot use the index. Cast the literal side instead, or cast only in the SELECT list.
 - Keep recurring queries stable in shape: the same repeated GROUP BY gets a projection and becomes fast automatically after a few runs.
-- Inspect a query plan with `EXPLAIN SELECT ...` (the `indexes = 1` option is not supported in the query API).
 
 ## Original Row Payloads
 
