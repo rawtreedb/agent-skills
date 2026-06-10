@@ -1,9 +1,9 @@
 ---
 name: rawtree
-description: "Use when working with RawTree CLI and API workflows, including project setup, API key creation, ingest, query, logs, parameterized SQL, supported types, and error handling."
+description: "Use when working with RawTree CLI and API workflows, including project setup, API key creation, ingest, query, dynamic columns, query optimization, logs, parameterized SQL, supported types, and error handling."
 metadata:
   author: rawtree
-  version: "0.1.0"
+  version: "0.2.0"
 ---
 
 # RawTree
@@ -232,11 +232,46 @@ Example:
 SELECT user::String, value::Float64, inserted_at::Date FROM events
 ```
 
+## Dynamic Columns
+
+Tables have no fixed schema. Columns are created automatically from ingested JSON, and every column is dynamic: each value keeps its own concrete type (`Int64`, `String`, `Float64`, ...). The same field can hold different types across rows.
+
+- Reference columns directly by name: `SELECT action, user FROM events`.
+- Use dot notation for nested JSON fields: `SELECT user.id FROM events`.
+- Inspect the concrete type of each value with `dynamicType`:
+
+```sql
+SELECT value, dynamicType(value) AS value_type FROM events LIMIT 5
+```
+
+Semantics to rely on:
+
+- `ORDER BY`, `GROUP BY`, `DISTINCT`, and aggregates work natively on dynamic columns and compare by value: integer `1`, float `1.0`, and integers of different widths sort and group as the same value.
+- Functions and aggregates skip rows whose concrete type they cannot process. `sum(value)` over a column mixing numbers and strings sums the numbers; the response includes a hint listing the skipped types. Read hints to detect mixed-type fields.
+- Cast inline when one specific type is needed (`value::Float64`, `toString(user)`); no schema change required.
+
+## Write Queries the Optimizer Can Use
+
+There are no indexes, primary keys, or materialized views to define. The engine builds primary keys automatically from the ingested data and rebuilds them based on real query access patterns; repeatedly executed slow aggregations get automatic projections. To benefit:
+
+- Filter on bare columns so the auto-built primary key can prune: `WHERE user_id = 5`, `WHERE latency_ms > 1000`.
+- Do not wrap filter columns in functions (`WHERE toString(user_id) = '5'`); computed expressions cannot use the index. Cast the literal side instead, or cast only in the SELECT list.
+- Keep recurring queries stable in shape: the same repeated GROUP BY gets a projection and becomes fast automatically after a few runs.
+- Verify index usage with `EXPLAIN indexes = 1 SELECT ...`.
+
+## Original Row Payloads
+
+Each row's original JSON is kept in the virtual `__raw_data` column. Use it to debug ingestion, check inferred fields, or recover exact source payloads — not as the normal query path (bare columns are faster and index-eligible).
+
+```sql
+SELECT __raw_data FROM events LIMIT 10
+SELECT __raw_data.user.id FROM events LIMIT 10
+```
+
 ## Query Tips
 
-- Only SELECT queries are allowed (read-only).
+- Only read queries are allowed: statements must start with SELECT, WITH, EXPLAIN, or DESCRIBE.
 - Standard SQL is supported.
-- Use dot notation to access nested JSON fields.
 - Common patterns:
 
 ```sql
