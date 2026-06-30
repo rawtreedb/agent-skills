@@ -1,0 +1,19 @@
+{
+  "name": "rawtree-agent-skills",
+  "metadata": {
+    "description": "RawTree skills for Claude Code"
+  },
+  "owner": {
+    "name": "RawTree"
+  },
+  "plugins": [
+    {
+      "name": "rawtree",
+      "description": "Use RawTree CLI and API workflows from coding agents",
+      "source": "./",
+      "category": "developer-tools",
+      "homepage": "https://rawtree.com",
+      "tags": ["analytics", "rawtree", "cli", "api"]
+    }
+  ]
+}
