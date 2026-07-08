@@ -1,9 +1,9 @@
 ---
 name: rawtree
-description: "Use when working with RawTree CLI and API workflows, including project setup, API key creation, ingest, query, dynamic columns, query optimization, logs, parameterized SQL, supported types, and error handling."
+description: "Use when working with RawTree CLI and API workflows, including database setup, API key creation, ingest, query, dynamic columns, query optimization, logs, parameterized SQL, supported types, and error handling."
 metadata:
   author: rawtree
-  version: "0.2.0"
+  version: "0.3.0"
 ---
 
 # RawTree
@@ -22,7 +22,7 @@ Sign in flow for users and agents:
 
 1. Run: `rtree login`
 2. Optionally create an explicit API key for scripts/services:
-   `rtree key create --project <project> --name <name> --permission read_write`
+   `rtree key create --database <database> --name <name> --permission read_write`
 
 Permission levels for API keys:
 
@@ -30,8 +30,8 @@ Permission levels for API keys:
 
 Rules of thumb:
 
-- Use `rtree login` for interactive auth and project/org management.
-- Use explicit API keys (`rw_...`) for programmatic API calls.
+- Use `rtree login` for interactive auth and database/org management.
+- Use explicit API keys (`rt_...`) for programmatic API calls.
 - Query endpoints are read-only (SELECT-only validation).
 
 ## Cli Quick Start
@@ -54,12 +54,12 @@ Common flows:
 # Sign in
 rtree login
 
-# Create/select project
-rtree project create analytics
-rtree project use analytics
+# Create/select database
+rtree database create analytics
+rtree database use analytics
 
 # Create an explicit API key for API usage
-rtree key create --project analytics --name api --permission read_write
+rtree key create --database analytics --name api --permission read_write
 
 # Insert JSON (inline, file, or URL)
 rtree insert --table events --data '{"event":"signup","user_id":1}'
@@ -67,7 +67,7 @@ rtree insert --table events --file ./events.jsonl
 rtree insert --table events --url https://example.com/events.jsonl
 
 # Optional built-in transforms for ingest
-# otlp-traces, otlp-logs, otlp-metrics, cloudwatch-logs, cloudtrail
+# otlp-traces, otlp-logs, otlp-metrics, cloudwatch-logs, cloudtrail, firehose
 rtree insert --table traces --url https://example.com/otlp.json --transform otlp-traces
 
 # Query
@@ -75,28 +75,30 @@ rtree query --sql "SELECT count() FROM events"
 rtree query "SELECT * FROM events LIMIT 10"
 
 # Logs
-rtree logs --project analytics --since 1h --type insert --status error --table events
+rtree logs --database analytics --since 1h --type insert --status error --table events
 
 # API keys (command is singular: key)
-rtree key list --project analytics
-rtree key create --project analytics --name ci --permission read_write
-rtree key delete --project analytics <id_or_token>
+rtree key list --database analytics
+rtree key create --database analytics --name ci --permission read_write
+rtree key delete --database analytics <id_or_token>
 
 # Tables
-rtree table list --project analytics
-rtree table describe --project analytics events
+rtree table list --database analytics
+rtree table describe --database analytics events
 ```
 
 Agent-friendly flags and env:
 
 ```text
 --json                    # machine-readable output for most commands
+--api-key <api-key>       # API key for non-interactive use
 --api-url <url>           # override endpoint
+--database <database>
 --org <organization>
 
-RAWTREE_URL=https://api.rawtree.com
-RAWTREE_TOKEN=rw_...
-RAWTREE_PROJECT=analytics
+RAWTREE_API_KEY=rt_...
+RAWTREE_API_URL=https://api.rawtree.com
+RAWTREE_DATABASE=analytics
 RAWTREE_ORG=team_alpha
 ```
 
@@ -106,10 +108,10 @@ RAWTREE_ORG=team_alpha
 BASE_URL="https://api.rawtree.com"
 # 1) Sign in and create key with CLI:
 #    rtree login
-#    rtree project create analytics
-#    rtree project use analytics
-#    rtree key create --project analytics --name api --permission read_write
-API_KEY="<rw_token_from_rtree_key_create>"
+#    rtree database create analytics
+#    rtree database use analytics
+#    rtree key create --database analytics --name api --permission read_write
+API_KEY="<rt_token_from_rtree_key_create>"
 
 # 2) Insert rows (table auto-created on first insert)
 curl -X POST "$BASE_URL/v1/tables/events" \
@@ -126,12 +128,11 @@ curl -X POST "$BASE_URL/v1/query" \
 
 ## Api Reference (Agent-Oriented)
 
-### Projects
+### Databases
 
-- `GET /v1/projects`
-- `POST /v1/projects` `{"name": "..."}` (or empty body for generated name)
-- `PATCH /v1/projects/{project}` `{"name": "..."}`
-- `DELETE /v1/projects/{project}`
+- `GET /v1/databases`
+- `POST /v1/databases` `{"name": "..."}`
+- `DELETE /v1/databases/{database}`
 
 ### Data query
 
@@ -147,7 +148,7 @@ curl -X POST "$BASE_URL/v1/query" \
 - Query parameters:
   - `start_time`, `end_time`, `limit`, `offset`, `search`
 - search filter format:
-  - `type:select|insert status:success|error table:table1,table2`
+  - `type:select|insert|describe|explain status:success|error table:table1,table2`
 
 ### Tables
 
@@ -169,8 +170,9 @@ Insert modes for `POST /v1/tables/{table}`:
 - `POST /v1/keys` `{"name","permission"}`
 - `DELETE /v1/keys/{id_or_token}`
 - Notes:
-  - Unscoped `/v1/keys` routes require admin API key auth.
-  - `id_or_token` accepts UUID id or full `rw_` token.
+  - JWT calls require `?organization=<organization>&database=<database>`.
+  - API key calls require an admin database API key.
+  - `id_or_token` accepts UUID id or full `rt_` token.
 
 ### Health
 
@@ -178,25 +180,25 @@ Insert modes for `POST /v1/tables/{table}`:
 
 ## Parameterized Queries
 
-RawTree query requests accept `{"sql":"..."}` only. Treat parameterization as an application-level pattern, not a platform request-body feature.
-
-Build the final SQL in code, then send it in the `sql` field.
-
-Example (curl with app-provided values):
+Use `{param_name:Type}` syntax in SQL to define parameters, and pass values in the `params` field of the request body. Parameter types must be valid RawTree types (see Supported Types).
 
 ```bash
 BASE_URL="https://api.rawtree.com"
-API_KEY="<rw_token>"
-USER_ID="alice"
-N="10"
-
-SQL=$(printf "SELECT * FROM events WHERE user = '%s' LIMIT %s" "$USER_ID" "$N")
+API_KEY="<rt_token>"
 
 curl -X POST "$BASE_URL/v1/query" \
   -H "Authorization: Bearer $API_KEY" \
   -H "Content-Type: application/json" \
-  -d "{\"sql\":\"$SQL\"}"
+  -d '{"sql":"SELECT * FROM events WHERE user = {user_id:String} LIMIT {n:UInt32}","params":{"user_id":"alice","n":10}}'
 ```
+
+With the CLI, write the same placeholder syntax in the SQL (params are passed via the API body):
+
+```bash
+rtree query "SELECT * FROM events WHERE user = {user_id:String}"
+```
+
+Prefer parameters over interpolating values into SQL strings in code.
 
 ## Supported Types
 
