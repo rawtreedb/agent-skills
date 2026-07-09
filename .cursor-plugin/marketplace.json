@@ -1,0 +1,12 @@
+{
+  "name": "rawtree-skills",
+  "owner": {
+    "name": "RawTree"
+  },
+  "plugins": [
+    {
+      "name": "rawtree",
+      "source": "./"
+    }
+  ]
+}

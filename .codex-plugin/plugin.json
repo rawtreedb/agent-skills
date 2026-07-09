@@ -1,0 +1,29 @@
+{
+  "name": "rawtree",
+  "description": "RawTree skills for CLI and API workflows: project setup, API keys, ingest, query, logs, dynamic columns, and errors.",
+  "version": "0.2.0",
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "author": {
+    "name": "RawTree",
+    "url": "https://rawtree.com"
+  },
+  "homepage": "https://rawtree.com",
+  "repository": "https://github.com/rawtreedb/agent-skills",
+  "keywords": ["analytics", "rawtree", "cli", "api"],
+  "interface": {
+    "displayName": "RawTree",
+    "shortDescription": "RawTree CLI and API guidance.",
+    "longDescription": "Use RawTree from coding agents with guidance for setup, authentication, ingest, querying, logs, dynamic columns, and error handling.",
+    "developerName": "RawTree",
+    "category": "Developer Tools",
+    "capabilities": ["Reference", "Developer Tools"],
+    "websiteURL": "https://rawtree.com",
+    "defaultPrompt": [
+      "Show me the RawTree quick start.",
+      "Help me ingest JSON into RawTree.",
+      "Write a RawTree query for my data."
+    ],
+    "brandColor": "#16A34A"
+  }
+}

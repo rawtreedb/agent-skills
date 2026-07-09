@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "rawtree": {
+      "command": "npx",
+      "args": ["-y", "@rawtree/mcp"],
+      "env": {
+        "RAWTREE_API_KEY": "${RAWTREE_API_KEY}"
+      }
+    }
+  }
+}

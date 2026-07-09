@@ -1,0 +1,13 @@
+{
+  "name": "rawtree",
+  "displayName": "RawTree",
+  "description": "RawTree skills for CLI and API workflows: project setup, API keys, ingest, query, logs, dynamic columns, and errors.",
+  "version": "0.2.0",
+  "author": {
+    "name": "RawTree",
+    "url": "https://rawtree.com"
+  },
+  "homepage": "https://rawtree.com",
+  "repository": "https://github.com/rawtreedb/agent-skills",
+  "keywords": ["analytics", "rawtree", "cli", "api"]
+}
