@@ -1,9 +1,9 @@
 ---
 name: rawtree
-description: "Use when working with RawTree CLI and API workflows, including database setup, API key creation, ingest, query, dynamic columns, query optimization, logs, parameterized SQL, supported types, and error handling."
+description: "Use when working with RawTree CLI and API workflows, including database setup, API key creation, ingest, query, dynamic columns, query optimization, logs, parameterized SQL, supported types, HTTP client setup, and error handling."
 metadata:
   author: rawtree
-  version: "0.3.0"
+  version: "0.4.0"
 ---
 
 # RawTree
@@ -124,6 +124,41 @@ curl -X POST "$BASE_URL/v1/query" \
   -H "Authorization: Bearer $API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"sql":"SELECT event, count() FROM events GROUP BY event ORDER BY count() DESC"}'
+```
+
+## Http Clients And User-Agent
+
+Send an explicit `User-Agent` from programmatic clients. The CDN in front of the API
+rejects Python's standard-library default before the request reaches the application:
+
+```bash
+curl -sS -A "Python-urllib/3.14" https://api.rawtree.com/health
+# error code: 1010        <- HTTP 403, plain text, not JSON
+
+curl -sS -A "my-app/1.0" https://api.rawtree.com/health
+# {"status":"ok"}         <- HTTP 200
+```
+
+It applies to every endpoint, including unauthenticated `/health`, so it looks like an
+authentication failure but is not — no API key is involved. `requests`, `httpx`, `curl`
+and Go's default agent are unaffected; only the `Python-urllib/*` signature is blocked.
+
+If you use `urllib` from the standard library, set the header:
+
+```python
+import json, urllib.request
+
+req = urllib.request.Request(
+    f"{BASE_URL}/v1/tables/events",
+    data=json.dumps([{"event": "signup", "user_id": 1}]).encode(),
+    headers={
+        "Authorization": f"Bearer {API_KEY}",
+        "Content-Type": "application/json",
+        "User-Agent": "my-app/1.0",  # required: the urllib default is rejected
+    },
+    method="POST",
+)
+urllib.request.urlopen(req)
 ```
 
 ## Api Reference (Agent-Oriented)
@@ -281,8 +316,13 @@ SELECT id, count() FROM events GROUP BY id ORDER BY count() DESC LIMIT 10
 
 ## Errors
 
-All errors return: `{"error":"code","message":"...","hint":"..."}`
+API errors return: `{"error":"code","message":"...","hint":"..."}`
 The hint field contains actionable suggestions to fix the issue.
+
+A response whose body is **not** JSON did not come from the API — it was rejected at the
+edge before reaching it. The common case is a `403` with the plain-text body
+`error code: 1010`, which means the CDN blocked the request's `User-Agent`; see
+"Http Clients And User-Agent" above. Do not read it as an invalid or expired API key.
 
 CLI exit codes:
 
