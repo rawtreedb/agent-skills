@@ -1,6 +1,6 @@
 ---
 name: rawtree
-description: "Use when working with RawTree CLI and API workflows, including database setup, API key creation, ingest, query, dynamic columns, query optimization, logs, parameterized SQL, supported types, HTTP client setup, and error handling."
+description: "Use when working with RawTree CLI and API workflows, including database setup, API key creation, ingest, query, dynamic columns, query optimization, logs, parameterized SQL, supported types, bulk ingest, schema inspection, HTTP client setup, and error handling."
 metadata:
   author: rawtree
   version: "0.4.0"
@@ -199,6 +199,21 @@ Insert modes for `POST /v1/tables/{table}`:
 - URL ingest: `/v1/tables/{table}?url=<encoded_url>[&transform=<name>]`
   URL ingest streams NDJSON progress events.
 
+The request body must be **one JSON value** — an object or an array. Newline-delimited
+JSON is *not* accepted here, even though `rtree insert --file events.jsonl` and URL
+ingest both take it; posting NDJSON directly fails with
+`{"error":"bad_request","message":"Invalid JSON body."}`. Wrap the lines in an array.
+
+A successful insert returns the row count: `{"inserted": 3}`.
+
+Data endpoints accept `?database=<database>` (and `?organization=<organization>`);
+without them the key's default database is used.
+
+`DELETE /v1/tables/{table}` requires an **`admin`** key; `read_write` is not enough and
+returns `{"error":"forbidden","hint":"Deleting tables requires admin permission."}`. Plan
+for this when handing a service a key — a `read_write` key can create tables it cannot
+drop.
+
 ### API keys
 
 - `GET /v1/keys`
@@ -292,6 +307,48 @@ There are no indexes, primary keys, or materialized views to define. The engine 
 - Filter on bare columns so the auto-built primary key can prune: `WHERE user_id = 5`, `WHERE latency_ms > 1000`.
 - Do not wrap filter columns in functions (`WHERE toString(user_id) = '5'`); computed expressions cannot use the index. Cast the literal side instead, or cast only in the SELECT list.
 - Keep recurring queries stable in shape: the same repeated GROUP BY gets a projection and becomes fast automatically after a few runs.
+
+## Bulk Ingest
+
+Batch rows into one request. A single-row insert costs roughly one second end to end, so
+inserting a row per request is about **1 row/s**, while a few thousand rows in one request
+is **thousands of rows/s** — a three-orders-of-magnitude difference, not a micro-optimisation.
+
+```bash
+# Slow: one request per row (~1 row/s)
+for row in "${rows[@]}"; do
+  curl -X POST "$BASE_URL/v1/tables/events" -H "Authorization: Bearer $API_KEY" \
+    -H "Content-Type: application/json" -d "$row"
+done
+
+# Fast: one request per batch (measured ~3.5k rows/s for 5,000-row batches)
+curl -X POST "$BASE_URL/v1/tables/events" -H "Authorization: Bearer $API_KEY" \
+  -H "Content-Type: application/json" -d "$(jq -s '.' rows.jsonl)"
+```
+
+Large bodies are fine — a 60 MB / 66,000-row array inserts in about 12 s. For a big load,
+batch in the low thousands of rows and stream batch by batch rather than building one
+enormous body. For files and remote data prefer `rtree insert --file` / `--url`, which
+handle the batching for you.
+
+## Inspecting Tables And Schema
+
+Use `DESCRIBE TABLE <table>` or `GET /v1/tables/{table}` to see inferred columns.
+
+**Do not use `system.columns` to discover a table's shape.** Physically the table holds one
+`JSON` column, so `system.columns` reports exactly one row — `__raw_data` — while `DESCRIBE`
+reports every inferred field:
+
+```sql
+SELECT name, type FROM system.columns WHERE table = 'events'  -- 1 row:  __raw_data  JSON
+DESCRIBE TABLE events                                         -- every field, as Dynamic
+```
+
+Both are telling the truth about different things, but only `DESCRIBE` answers "what can I
+select?". The fields are queryable as ordinary bare columns regardless
+(`SELECT user_id FROM events`), and each reports type `Dynamic` — see Dynamic Columns.
+
+`SHOW CREATE TABLE` is rejected: read queries must start with SELECT, WITH, EXPLAIN or DESCRIBE.
 
 ## Original Row Payloads
 
