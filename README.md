@@ -8,8 +8,16 @@ Agent Skills for RawTree-focused AI workflows.
 skills/
   rawtree/
     SKILL.md
+    agents/
+      openai.yaml
+    references/
+      api.md
+      cli.md
+      dynamic-fields.md
+      performance.md
+      query.md
 ```
 
 ## Available Skills
 
-- `rawtree` — RawTree API and CLI guidance sourced from `backend/src/routes/docs.rs`.
+- `rawtree` — One routed skill for RawTree API, CLI, ingestion, administration, and engine-aware SQL queries.
