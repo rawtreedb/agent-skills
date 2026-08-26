@@ -35,5 +35,18 @@ The bundled MCP configuration connects to RawTree's hosted Streamable HTTP
 server at `https://mcp.rawtree.com/mcp`. Authenticate through Kiro when
 prompted. Do not add API keys or authorization headers to this repository.
 
+Kiro MCP configuration:
+
+```json
+{
+  "mcpServers": {
+    "rawtree": {
+      "url": "https://mcp.rawtree.com/mcp",
+      "disabled": false
+    }
+  }
+}
+```
+
 For local MCP development, follow the setup in the
 [`rawtree-mcp` repository](https://github.com/rawtreedb/rawtree-mcp).

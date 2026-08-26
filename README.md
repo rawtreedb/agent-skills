@@ -12,6 +12,7 @@ discover the skills under `skills/`.
 plugin.json
 mcp.json
 POWER.md
+icon.png
 skills/
   rawtree/
     SKILL.md
@@ -33,10 +34,15 @@ the human-readable display name **RawTree**, description, keywords, and author.
 It is retained for compatibility with local Power installation while
 `plugin.json` remains the portable package manifest.
 
-The root `mcp.json` connects the Power to RawTree's hosted Streamable HTTP MCP
-server at `https://mcp.rawtree.com/mcp`. Kiro manages the MCP connection and
+The root `mcp.json` uses Kiro's native MCP configuration shape and connects the
+Power to RawTree's hosted Streamable HTTP MCP server at
+`https://mcp.rawtree.com/mcp`. Kiro manages the MCP connection and
 authentication. No API keys or authorization headers are stored in this
 repository.
+
+The repository also includes `icon.png`, RawTree's branded Power asset. Kiro's
+custom GitHub and local Power imports currently use a generic placeholder icon;
+the asset is available for registry curation or a local Kiro registry entry.
 
 For local MCP development, continue to use the setup in the
 [`rawtree-mcp` repository](https://github.com/rawtreedb/rawtree-mcp), which
