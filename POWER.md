@@ -29,6 +29,11 @@ The detailed, portable instructions live in
 the source of truth for authentication, resource discovery, SQL, ingestion,
 troubleshooting, and confirmation requirements for mutations.
 
+Kiro also receives the generated auto-inclusion adapter at
+[`steering/rawtree.md`](steering/rawtree.md). It mirrors the canonical skill
+so RawTree guidance is discoverable in Kiro's Agent Steering & Skills panel and
+through `/rawtree`.
+
 ## MCP
 
 The bundled MCP configuration connects to RawTree's hosted Streamable HTTP
