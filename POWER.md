@@ -39,10 +39,11 @@ Kiro MCP configuration:
 
 ```json
 {
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json",
   "mcpServers": {
     "rawtree": {
-      "url": "https://mcp.rawtree.com/mcp",
-      "disabled": false
+      "type": "streamable-http",
+      "url": "https://mcp.rawtree.com/mcp"
     }
   }
 }
