@@ -11,6 +11,7 @@ discover the skills under `skills/`.
 ```text
 plugin.json
 mcp.json
+POWER.md
 skills/
   rawtree/
     SKILL.md
@@ -26,6 +27,11 @@ The root `plugin.json` follows Agent Plugins 1.0 and makes this repository
 installable as a Kiro Power. The existing `skills/rawtree/SKILL.md` remains the
 single source of truth for RawTree guidance; it is not duplicated into a
 second Power repository.
+
+The root `POWER.md` provides Kiro's legacy presentation metadata, including
+the human-readable display name **RawTree**, description, keywords, and author.
+It is retained for compatibility with local Power installation while
+`plugin.json` remains the portable package manifest.
 
 The root `mcp.json` connects the Power to RawTree's hosted Streamable HTTP MCP
 server at `https://mcp.rawtree.com/mcp`. Kiro manages the MCP connection and
