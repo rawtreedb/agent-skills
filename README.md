@@ -16,6 +16,14 @@ icon.png
 skills/
   rawtree/
     SKILL.md
+    agents/
+      openai.yaml
+    references/
+      api.md
+      cli.md
+      dynamic-fields.md
+      performance.md
+      query.md
 ```
 
 ## Available Skills
