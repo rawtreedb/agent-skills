@@ -20,63 +20,29 @@ skills/
 
 ## Available Skills
 
-- `rawtree` — RawTree API and CLI guidance for database, ingestion, querying, and observability workflows.
+- `rawtree` — RawTree guidance for database, ingestion, querying, dynamic-column, and observability workflows.
 
 ## Examples
 
-The `rawtree` skill activates automatically when a task involves RawTree. You
-can also invoke it directly with `/rawtree` when it is installed as a
-standalone skill in Kiro.
+The `rawtree` skill activates automatically when a task involves RawTree. In
+Kiro, you can also invoke it directly with `/rawtree` when it is installed as
+a standalone skill. Other compatible agents can discover it from
+`skills/rawtree/SKILL.md`.
 
 ### Ask an agent
 
 Try prompts such as:
 
-- “Set up a RawTree database called `analytics` and explain the safest way to create an API key.”
-- “Insert these signup events into an `events` table, then verify the insert with a bounded read-only query.”
-- “Show the top event types in the last 24 hours and explain the query plan.”
-- “Investigate failed inserts from the last hour and suggest how to fix them.”
+- “Use the RawTree skill to plan an analytics workflow for evolving event data.”
+- “Use the RawTree skill to design an ingestion workflow for logs, traces, and metrics.”
+- “Use the RawTree skill to review this query for safe, bounded, read-only analysis.”
+- “Use the RawTree skill to explain how dynamic columns handle nested and mixed-type JSON.”
+- “Use the RawTree skill to investigate a failed ingestion and suggest the next diagnostic steps.”
+- “Use the RawTree skill to review this RawTree integration for safety and performance issues.”
 
 When the RawTree MCP server is connected, the agent can use the appropriate
-tools for table discovery, ingestion, querying, and logs.
-
-### CLI workflow
-
-```bash
-# Authenticate and select a database
-rtree login
-rtree database create analytics
-rtree database use analytics
-
-# Ingest JSON; the table is created automatically on first insert
-rtree insert --table events --data '{"event":"signup","user_id":1}'
-
-# Run a bounded analytical query
-rtree query --sql "SELECT event, count() FROM events GROUP BY event ORDER BY count() DESC LIMIT 10"
-```
-
-### Direct API workflow
-
-Use an explicit API key for scripts and CI rather than an interactive login:
-
-```bash
-export RAWTREE_API_KEY="rt_..."
-BASE_URL="https://api.rawtree.com"
-
-curl -sS -X POST "$BASE_URL/v1/tables/events" \
-  -H "Authorization: Bearer $RAWTREE_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '[{"event":"signup","user_id":1},{"event":"purchase","user_id":1,"amount":42}]'
-
-curl -sS -X POST "$BASE_URL/v1/query" \
-  -H "Authorization: Bearer $RAWTREE_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"sql":"SELECT event, count() FROM events GROUP BY event ORDER BY count() DESC LIMIT 10"}'
-```
-
-RawTree query endpoints accept read-only SQL. For nested or mixed-type JSON,
-the skill covers dynamic columns, dot notation, casts, `dynamicType`, and the
-`__raw_data` virtual column.
+tools for table discovery, ingestion, querying, and logs while following the
+skill's guidance.
 
 ## Kiro Power
 
