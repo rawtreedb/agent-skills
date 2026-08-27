@@ -61,12 +61,3 @@ For URL ingestion, pass a public HTTP(S) URL through the endpoint's `url` query 
 Transforms apply to JSON body inserts. URL ingestion does not accept transforms; pre-transform hosted data.
 
 Treat inserts and retries as append-like. A failed or interrupted multi-request workflow may have inserted data already. When duplicate avoidance matters, inspect the current OpenAPI deduplication options and use a stable retry token deliberately.
-
-## Inspect and Diagnose
-
-- Use table list and describe endpoints to verify the selected database and schema.
-- Use `/v1/logs` for HTTP request activity, not SQL execution history. Direct calls require both `start_time` and `end_time`; paginate with `limit` and `offset`.
-- Parse `error`, `message`, and `hint` on errors. Honor rate-limit headers and `Retry-After` when present.
-- Obtain explicit authorization before deleting a database, table, or key, then verify the exact target in the response or a follow-up read.
-
-Finish when the response status, content type, body shape, selected database, and any partial result all match the intended operation.

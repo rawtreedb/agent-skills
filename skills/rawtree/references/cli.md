@@ -60,9 +60,3 @@ rtree insert --database analytics --table events --url https://example.com/event
 Apply transforms only to inline or file data. URL ingestion and transforms are mutually exclusive; pre-transform URL-hosted data.
 
 A `.jsonl` file is uploaded in multiple concurrent batches. If the command fails, earlier batches may already be present. Inspect the result before retrying and avoid assuming an insert is atomic.
-
-## Diagnose Failures
-
-`rtree logs` reports HTTP request activity, not SQL execution history. Use a bounded window and current help for filters. Query failures can additionally expose messages and hints in the query response.
-
-Finish when the CLI exited successfully, its machine-readable result matches the requested target, and any partial insert or failed request is accounted for.
