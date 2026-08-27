@@ -20,7 +20,7 @@ skills/
 
 ## Available Skills
 
-- `rawtree` — RawTree API and CLI guidance sourced from `backend/src/routes/docs.rs`.
+- `rawtree` — RawTree API and CLI guidance for database, ingestion, querying, and observability workflows.
 
 ## Examples
 
