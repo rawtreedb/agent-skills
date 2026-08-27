@@ -28,7 +28,28 @@ skills/
 
 ## Available Skills
 
-- `rawtree` — RawTree API and CLI guidance sourced from `backend/src/routes/docs.rs`.
+- `rawtree` — RawTree guidance for database, ingestion, querying, dynamic-column, and observability workflows.
+
+## Examples
+
+The `rawtree` skill activates automatically when a task involves RawTree. In
+Kiro, you can also invoke it directly with `/rawtree` when it is installed as
+a standalone skill. Other compatible agents can discover it from
+`skills/rawtree/SKILL.md`.
+
+### Ask an agent
+
+Try prompts such as:
+
+- “Using RawTree, plan a workflow for evolving event data.”
+- “Design a RawTree ingestion workflow for logs, traces, and metrics.”
+- “Review this RawTree SQL query for bounded, read-only analysis.”
+- “Explain how RawTree Dynamic fields handle nested and mixed-type JSON.”
+- “Using RawTree MCP tools, describe this table and write a bounded query.”
+
+When the RawTree MCP server is connected, the agent can use the appropriate
+tools for table discovery, ingestion, querying, and logs while following the
+skill's guidance.
 
 ## Kiro Power
 
