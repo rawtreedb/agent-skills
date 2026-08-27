@@ -53,6 +53,9 @@ supports both stdio and a local HTTP server.
 For support with the RawTree Power or MCP integration, contact
 [contact@rawtree.com](mailto:contact@rawtree.com).
 
+See the [Tinybird Privacy Policy](https://www.tinybird.co/privacy) for
+information about privacy and data handling.
+
 ### Install in Kiro
 
 In Kiro, open **Powers → Add Custom Power → Import power from GitHub** and
