@@ -33,12 +33,12 @@ a standalone skill. Other compatible agents can discover it from
 
 Try prompts such as:
 
-- “Use the RawTree skill to plan an analytics workflow for evolving event data.”
-- “Use the RawTree skill to design an ingestion workflow for logs, traces, and metrics.”
-- “Use the RawTree skill to review this query for safe, bounded, read-only analysis.”
-- “Use the RawTree skill to explain how dynamic columns handle nested and mixed-type JSON.”
-- “Use the RawTree skill to investigate a failed ingestion and suggest the next diagnostic steps.”
-- “Use the RawTree skill to review this RawTree integration for safety and performance issues.”
+- “Plan an analytics workflow for evolving event data.”
+- “Design an ingestion workflow for logs, traces, and metrics.”
+- “Review this query for safe, bounded, read-only analysis.”
+- “Explain how dynamic columns handle nested and mixed-type JSON.”
+- “Investigate a failed ingestion and suggest the next diagnostic steps.”
+- “Review this RawTree integration for safety and performance issues.”
 
 When the RawTree MCP server is connected, the agent can use the appropriate
 tools for table discovery, ingestion, querying, and logs while following the
