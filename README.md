@@ -48,6 +48,11 @@ For local MCP development, continue to use the setup in the
 [`rawtree-mcp` repository](https://github.com/rawtreedb/rawtree-mcp), which
 supports both stdio and a local HTTP server.
 
+## Support
+
+For support with the RawTree Power or MCP integration, contact
+[contact@rawtree.com](mailto:contact@rawtree.com).
+
 ### Install in Kiro
 
 In Kiro, open **Powers → Add Custom Power → Import power from GitHub** and
