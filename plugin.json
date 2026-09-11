@@ -2,7 +2,7 @@
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "rawtree",
   "version": "0.2.0",
-  "description": "Build analytics workflows with RawTree's dynamic-column database, SQL query engine, ingestion API, observability data, and hosted MCP tools.",
+  "description": "Use RawTree to ingest, query, and analyze event data.",
   "author": {
     "name": "RawTree",
     "url": "https://rawtree.com",
@@ -30,8 +30,8 @@
     "com.openai": {
       "interface": {
         "displayName": "RawTree",
-        "shortDescription": "Query and ingest RawTree data",
-        "longDescription": "Explore RawTree databases, inspect tables, ingest events, and run SQL over logs, traces, and metrics. Includes workflow guidance for Dynamic fields, query performance, and the hosted RawTree MCP server.",
+        "shortDescription": "Query and analyze event data",
+        "longDescription": "Explore your RawTree databases, ingest JSON events, and analyze logs, traces, and metrics with SQL. Inspect evolving data, work with nested fields, investigate errors, and improve query performance. Connect your RawTree account to work with your data.",
         "developerName": "RawTree",
         "category": "Developer Tools",
         "capabilities": [
@@ -42,9 +42,9 @@
         "privacyPolicyURL": "https://www.tinybird.co/privacy",
         "termsOfServiceURL": "https://www.tinybird.co/terms-and-conditions",
         "defaultPrompt": [
-          "Explore my RawTree databases and tables.",
-          "Write a bounded RawTree query for recent errors.",
-          "Help me ingest JSON events into RawTree."
+          "Investigate recent errors in my RawTree logs",
+          "Ingest JSON events into a RawTree table",
+          "Help optimize a slow RawTree SQL query"
         ],
         "composerIcon": "./icon.png",
         "logo": "./icon.png"
