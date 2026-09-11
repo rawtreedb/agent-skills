@@ -10,7 +10,9 @@ Prefer the hosted Streamable HTTP server for interactive agents:
 https://mcp.rawtree.com/mcp
 ```
 
-OAuth-capable clients open a browser for sign-in and approval. In Codex:
+When the RawTree plugin supplies the MCP connection, authenticate that connection through the client's plugin settings and verify tool discovery. Use manual setup below only when no RawTree connection is configured.
+
+OAuth-capable clients open a browser for sign-in and approval. For standalone Codex setup:
 
 ```bash
 codex mcp add rawtree --url https://mcp.rawtree.com/mcp
