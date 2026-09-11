@@ -14,8 +14,22 @@ import yaml
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def validate_listing(manifest):
+    # Directory submission limits are stricter than package-upload validation:
+    # https://developers.openai.com/plugins/deploy/submission-errors#final-directory-submission
+    interface = manifest["extensions"]["com.openai"]["interface"]
+    for field, limit in (("displayName", 30), ("shortDescription", 30),
+                         ("developerName", 80), ("longDescription", 4000)):
+        value = interface.get(field)
+        if not isinstance(value, str) or not value.strip() or len(value) > limit:
+            raise ValueError(f"interface.{field} must contain 1–{limit} characters")
+        if field != "longDescription" and value.splitlines() != [value]:
+            raise ValueError(f"interface.{field} must fit on one line")
+
+
 def compatibility_files():
     manifest = json.loads((ROOT / "plugin.json").read_text())
+    validate_listing(manifest)
     mcp = json.loads((ROOT / "mcp.json").read_text())
     legacy = {key: value for key, value in manifest.items()
               if key not in ("$schema", "extensions")}

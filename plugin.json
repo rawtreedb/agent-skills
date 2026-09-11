@@ -30,7 +30,7 @@
     "com.openai": {
       "interface": {
         "displayName": "RawTree",
-        "shortDescription": "Query and ingest data with RawTree",
+        "shortDescription": "Query and ingest RawTree data",
         "longDescription": "Explore RawTree databases, inspect tables, ingest events, and run SQL over logs, traces, and metrics. Includes workflow guidance for Dynamic fields, query performance, and the hosted RawTree MCP server.",
         "developerName": "RawTree",
         "category": "Developer Tools",
