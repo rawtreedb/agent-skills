@@ -7,7 +7,6 @@ keywords:
   - analytics database
   - database
   - SQL
-  - ClickHouse
   - dynamic columns
   - observability
   - logs

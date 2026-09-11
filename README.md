@@ -2,17 +2,22 @@
 
 Agent Skills for RawTree-focused AI workflows.
 
-This repository is also a portable Agent Plugins package. Kiro can install it
-as the RawTree Power, while other compatible coding agents can continue to
-discover the skills under `skills/`.
+This repository packages the RawTree skill and hosted MCP server for OpenAI
+ChatGPT/Codex and Kiro. It uses the portable Agent Plugins format with OpenAI
+listing metadata and generated Codex compatibility files. Kiro can install it
+as the RawTree Power; compatible agents can also use `skills/` directly.
 
 ## Repository Structure
 
 ```text
 plugin.json
 mcp.json
+.codex-plugin/plugin.json  # generated compatibility manifest
+.mcp.json                 # generated compatibility MCP configuration
 POWER.md
 icon.png
+scripts/package_plugin.py
+docs/openai-submission.md
 skills/
   rawtree/
     SKILL.md
@@ -51,6 +56,43 @@ Try prompts such as:
 When the RawTree MCP server is connected, the agent can use the appropriate
 tools for table discovery, ingestion, querying, and logs while following the
 skill's guidance.
+
+## OpenAI plugin
+
+The root `plugin.json` is canonical. Its `extensions.com.openai.interface`
+provides the listing descriptions, publisher, policy links, icon, capabilities,
+and starter prompts. Portable clients discover `skills/` and `mcp.json` at the
+root. The generated `.codex-plugin/plugin.json` and `.mcp.json` support clients
+using the Codex compatibility format. Both formats use the same hosted endpoint;
+no local Node.js server or bundled credentials are required.
+
+Build and check the package with Python 3.10 or later:
+
+```bash
+python3 -m pip install -r requirements-dev.txt
+python3 scripts/package_plugin.py --check --build
+```
+
+This creates `dist/rawtree/` and `dist/rawtree.zip`, with the plugin manifest,
+MCP configuration, icon, license, and complete skill references. CI runs the same
+checks and attaches the ZIP to each successful workflow run.
+
+After changing `plugin.json` or `mcp.json`, regenerate the compatibility files
+with `python3 scripts/package_plugin.py`, then rerun the check/build command.
+Edit the portable files rather than the generated copies.
+
+For local testing, use `$plugin-creator` in Codex with the built
+`dist/rawtree` folder and request a personal marketplace entry. Install RawTree
+from that local source, authenticate its bundled MCP connection, and start a
+new task. Confirm RawTree tools are available before running queries. The skill
+can also be selected explicitly with `$rawtree`.
+
+Public publication requires a separate OpenAI submission and review. The
+[submission guide](docs/openai-submission.md) provides the endpoint, release
+notes, test cases, and remaining account-dependent steps. A merged PR or local
+marketplace installation does not publish the plugin.
+
+Packaging follows [OpenAI's plugin documentation](https://developers.openai.com/plugins/build/plugins).
 
 ## Kiro Power
 
