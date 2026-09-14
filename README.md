@@ -54,6 +54,24 @@ skill's guidance.
 
 ## OpenAI plugin
 
+### Install in Codex
+
+Add this repository as a marketplace, then install RawTree:
+
+```bash
+codex plugin marketplace add rawtreedb/agent-skills
+codex plugin add rawtree@rawtree
+```
+
+In the Codex app, you can also use **Add marketplace** with this repository's
+GitHub URL, then select RawTree from the added source. Authenticate the bundled
+MCP connection when prompted and start a new task to use the plugin.
+
+The catalog at `.agents/plugins/marketplace.json` points to the plugin at the
+repository root. No separate copy of the plugin is needed.
+
+### Package
+
 The root `plugin.json` is canonical. Its `extensions.com.openai.interface`
 provides the listing descriptions, publisher, policy links, icon, capabilities,
 and starter prompts. Portable clients discover the bundled `skills/` and
