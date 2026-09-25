@@ -29,8 +29,8 @@ ORDER BY rows DESC;
 ## Choose Conversion or Exact Extraction
 
 - `value::Int64` and `CAST(value AS Int64)` convert compatible variants to `Int64`. A missing value can become the target type's default, and an unconvertible value can fail the query.
-- `accurateCastOrNull(value, 'Int64')` performs tolerant conversion and returns `NULL` for invalid or overflowing values. Use it for dirty or uncertain data, then handle `NULL` explicitly.
-- `__raw_data.value.:Int64` extracts the exact stored `Int64` variant rather than converting. A nonmatching variant returns `NULL` when the target can be nullable, but some non-nullable-capable targets return their default instead. Pair exact extraction with `dynamicType(value)` for a reliable type audit; do not use it for general normalization.
+- `accurateCastOrNull(value, 'Int64')` performs tolerant conversion and returns `NULL` for invalid or overflowing values. Use it for dirty or uncertain data, then handle `NULL` explicitly. Known current limitation: when comparing against an indexed or key column, `accurateCastOrNull` prevents index/key usage; use a strict cast (`accurateCast(value, 'Int64')`, `value::Int64`, or `toInt64(value)`) in that position instead.
+- `__raw_data.value.:Int64` extracts the exact stored `Int64` variant rather than converting. A nonmatching variant returns `NULL` when the target can be nullable, but some non-nullable-capable targets return their default instead. Pair exact extraction with `dynamicType(value)` for a reliable type audit; do not use it for general normalization. Known current limitation: when comparing against an indexed or key column, `__raw_data.value.:Int64` also prevents index/key usage; use a strict cast (`accurateCast(value, 'Int64')`, `value::Int64`, or `toInt64(value)`) in that position instead.
 
 Strict casts can create false matches and groups: missing Dynamic values commonly become `''`, `0`, or another target default. Use `accurateCastOrNull`, or explicitly reject missing values before a strict cast, whenever default collision would change semantics.
 
