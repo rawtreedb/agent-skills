@@ -1,0 +1,47 @@
+name: validate
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: JSON syntax
+        run: |
+          for f in plugin.json mcp.json .mcp.json \
+            .agents/plugins/marketplace.json \
+            .claude-plugin/plugin.json .claude-plugin/marketplace.json \
+            .cursor-plugin/plugin.json .cursor-plugin/marketplace.json .cursor-plugin/mcp.json; do
+            python3 -m json.tool "$f" >/dev/null
+          done
+
+      - name: Versions agree
+        run: |
+          python3 - <<'PY'
+          import json
+          files = ["plugin.json", ".claude-plugin/plugin.json", ".cursor-plugin/plugin.json"]
+          versions = {f: json.load(open(f))["version"] for f in files}
+          print(versions)
+          assert len(set(versions.values())) == 1, "plugin versions differ"
+          PY
+
+      - name: MCP URL agrees
+        run: |
+          python3 - <<'PY'
+          import json
+          files = ["mcp.json", ".mcp.json", ".cursor-plugin/mcp.json"]
+          urls = {f: json.load(open(f))["mcpServers"]["rawtree"]["url"] for f in files}
+          print(urls)
+          assert len(set(urls.values())) == 1, "MCP URLs differ"
+          PY
+
+      - name: Claude Code validate (strict)
+        run: |
+          npm i -g @anthropic-ai/claude-code
+          claude plugin validate --strict ./.claude-plugin/plugin.json
+          claude plugin validate --strict ./.claude-plugin/marketplace.json

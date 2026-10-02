@@ -1,18 +1,77 @@
 # RawTree Agent Skills
 
-Agent Skills for RawTree-focused AI workflows.
+A skill and hosted MCP server for working with [RawTree](https://rawtree.com), following the [Agent Skills](https://agentskills.io) format. Available as a plugin for Cursor, Claude Code, Codex, and any [Agent Plugins](https://agent-plugins.org) client, and as a Kiro Power. Includes RawTree's hosted MCP server for tool access.
 
-This repository packages the RawTree skill and hosted MCP server for OpenAI
-ChatGPT/Codex and Kiro using the portable Agent Plugins format. Kiro can install
-it as the RawTree Power; compatible agents can also use `skills/` directly.
+## Install
+
+```bash
+npx skills add rawtreedb/agent-skills
+```
+
+This installs only the `rawtree` skill. To also get the RawTree MCP server, install the plugin for your agent below.
+
+### Cursor
+
+Cursor reads `.cursor-plugin/plugin.json`. Once RawTree is available in the [Cursor Marketplace](https://cursor.com/marketplace), open **Customize**, search for **RawTree**, and select **Install**, or run `/add-plugin rawtree` in chat. Until then, on a Teams or Enterprise plan add this repository from **Dashboard → Plugins & MCPs → Team Marketplaces → Add Marketplace → Import from Repo** (`https://github.com/rawtreedb/agent-skills`). To try it locally, clone the repository into `~/.cursor/plugins/local/rawtree` and run **Developer: Reload Window**.
+
+### Claude Code
+
+```bash
+claude plugin marketplace add rawtreedb/agent-skills
+claude plugin install rawtree@rawtree
+```
+
+Inside a session you can run `/plugin marketplace add rawtreedb/agent-skills` and `/plugin install rawtree@rawtree`. Then run `/mcp`, select `rawtree`, and complete the RawTree sign-in.
+
+### Codex
+
+```bash
+codex plugin marketplace add rawtreedb/agent-skills
+codex plugin add rawtree@rawtree
+```
+
+In the Codex app, you can also use **Add marketplace** with this repository's GitHub URL, then select RawTree from the added source. Authenticate the bundled MCP connection when prompted and start a new task to use the plugin.
+
+### Grok Bot and Grok Build
+
+Grok Bot lists RawTree on [grokbot.dev/plugins/rawtree](https://grokbot.dev/plugins/rawtree/): add a custom MCP connector pointing at `https://mcp.rawtree.com/mcp` and sign in with RawTree. That page is a community listing and does not install this repository's plugin.
+
+Grok Build reads the `.claude-plugin/` catalog in this repository:
+
+```bash
+grok plugin marketplace add rawtreedb/agent-skills
+grok plugin install rawtree --trust
+```
+
+### Kiro
+
+In Kiro, open **Powers → Add Custom Power → Import power from GitHub** and provide this repository URL. For local testing, use **Import power from a folder** after cloning the repository.
+
+### Other agents
+
+Any [Agent Plugins](https://agent-plugins.org) client can load the root `plugin.json` and `mcp.json`. Other agents can use `skills/rawtree/SKILL.md` directly.
+
+After installing, connect the MCP server. RawTree uses OAuth, so your client walks you through sign-in on first connect and no API key or header configuration is needed. You need a RawTree account.
 
 ## Repository Structure
 
 ```text
-plugin.json
-mcp.json
+plugin.json                  # Agent Plugins manifest (Codex, Kiro, Agent Plugins clients)
+mcp.json                     # Agent Plugins MCP config (streamable-http)
+.agents/plugins/
+  marketplace.json           # Codex marketplace catalog
+.claude-plugin/
+  plugin.json                # Claude Code manifest
+  marketplace.json           # Claude Code marketplace catalog
+.mcp.json                    # Claude Code MCP config (type: http)
+.cursor-plugin/
+  plugin.json                # Cursor manifest
+  marketplace.json           # Cursor marketplace catalog
+  mcp.json                   # Cursor MCP config (type: http, placement: server)
 POWER.md
 icon.png
+assets/
+  logo.png                   # 1024x1024 logo for the Claude Code and Cursor manifests
 skills/
   rawtree/
     SKILL.md
@@ -52,27 +111,21 @@ When the RawTree MCP server is connected, the agent can use the appropriate
 tools for table discovery, ingestion, querying, and logs while following the
 skill's guidance.
 
-## OpenAI plugin
+## Plugins
 
-### Install in Codex
+This repository follows the [Agent Plugins](https://agent-plugins.org) open standard: `plugin.json` and `mcp.json` at the root, skills in `skills/`. It is also a plugin for these platforms through their own manifests, all sharing the single `skills/rawtree` directory:
 
-Add this repository as a marketplace, then install RawTree:
+- **Cursor**: `.cursor-plugin/`
+- **Claude Code**: `.claude-plugin/` and `.mcp.json`
+- **Codex**: root `plugin.json` and `mcp.json`, catalog at `.agents/plugins/marketplace.json`
 
-```bash
-codex plugin marketplace add rawtreedb/agent-skills
-codex plugin add rawtree@rawtree
-```
+The catalogs point at the plugin at the repository root. No separate copy of the plugin is needed.
 
-In the Codex app, you can also use **Add marketplace** with this repository's
-GitHub URL, then select RawTree from the added source. Authenticate the bundled
-MCP connection when prompted and start a new task to use the plugin.
+Each platform gets its own MCP file because the formats differ: the root `mcp.json` must stay valid against the Agent Plugins schema (`type: streamable-http`, no extra fields), Claude Code reads `.mcp.json` (`type: http`), and Cursor's `.cursor-plugin/plugin.json` points at `.cursor-plugin/mcp.json`, which adds `"placement": "server"`. All three point at `https://mcp.rawtree.com/mcp`. Keep the versions in `plugin.json`, `.claude-plugin/plugin.json`, and `.cursor-plugin/plugin.json` in sync.
 
-The catalog at `.agents/plugins/marketplace.json` points to the plugin at the
-repository root. No separate copy of the plugin is needed.
+### OpenAI package
 
-### Package
-
-The root `plugin.json` is canonical. Its `extensions.com.openai.interface`
+The root `plugin.json` is canonical for OpenAI. Its `extensions.com.openai.interface`
 provides the listing descriptions, publisher, policy links, icon, capabilities,
 and starter prompts. Portable clients discover the bundled `skills/` and
 `mcp.json` at the root. The MCP configuration uses RawTree's hosted endpoint, so
@@ -112,14 +165,8 @@ supports both stdio and a local HTTP server.
 
 ## Support
 
-For support with the RawTree Power or MCP integration, contact
+For support with the RawTree plugins, Power, or MCP integration, contact
 [contact@rawtree.com](mailto:contact@rawtree.com).
 
 See the [Tinybird Privacy Policy](https://www.tinybird.co/privacy) for
 information about privacy and data handling.
-
-### Install in Kiro
-
-In Kiro, open **Powers → Add Custom Power → Import power from GitHub** and
-provide this repository URL. For local testing, use **Import power from a
-folder** after cloning the repository.
