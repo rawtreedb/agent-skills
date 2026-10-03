@@ -23,6 +23,8 @@ Optimize from observed query behavior. When a RawTree table has no explicit key 
 
 Direct equality, range, prefix `LIKE`, and `startsWith` predicates can prune when they constrain a usable sorting-key prefix. On an automatic-key table that prefix can differ by part; merely appearing later in a compound key is not enough. Cast predicates can still contribute filter statistics, so never change query meaning merely to remove a necessary cast.
 
+Known current limitation: `accurateCastOrNull` and exact-variant extraction such as `__raw_data.path.:Int64` on an indexed or key column block index/key usage for that predicate. When the compared column participates in an index or primary/sorting key, use a strict cast (`accurateCast`, `::`, or `to<Type>()`) instead.
+
 Prefer the simplest equivalent predicate. Arbitrary wrappers may hide a path from adaptive statistics, while a blanket claim that every function or cast disables pruning is incorrect.
 
 Ordinary conversions such as `path::Int64` can accrue adaptive statistics to the base path. Exact-variant expressions such as `__raw_data.path.:Int64` are tracked separately and can become separate automatic-key candidates; do not substitute exact extraction for conversion.
