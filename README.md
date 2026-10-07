@@ -160,6 +160,10 @@ For local MCP development, continue to use the setup in the
 [`rawtree-mcp` repository](https://github.com/rawtreedb/rawtree-mcp), which
 supports both stdio and a local HTTP server.
 
+## Network and Install Disclosure
+
+The plugin itself runs no code. It bundles a skill (Markdown) and an MCP configuration that connects to `https://mcp.rawtree.com/mcp` using OAuth with RawTree. The skill's CLI reference (`skills/rawtree/references/cli.md`) documents an optional install command for the RawTree CLI, `curl -fsSL https://rawtree.com/install.sh | bash`, which downloads and runs the installer script published by RawTree at `rawtree.com`. The skill tells agents to run it only when `rtree` is unavailable and installation is within the user's scope. The plugin never runs it automatically.
+
 ## Support
 
 For support with the RawTree plugins, Power, or MCP integration, contact
