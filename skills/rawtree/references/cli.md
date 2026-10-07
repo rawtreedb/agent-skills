@@ -4,11 +4,7 @@ Use the installed CLI as the command source of truth. Run `rtree --help` and `rt
 
 ## Install and Authenticate
 
-Install only when `rtree` is unavailable and installation is within scope:
-
-```bash
-curl -fsSL https://rawtree.com/install.sh | bash
-```
+Install only when `rtree` is unavailable and installation is within scope. Follow the official installation instructions in the RawTree CLI docs at https://rawtree.com/docs and review any installer before running it.
 
 Use `rtree login` for an interactive browser flow. For an agent, service, or CI job, prefer an existing API key through `--api-key` or `RAWTREE_API_KEY`; this avoids changing saved local credentials.
 

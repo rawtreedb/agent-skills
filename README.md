@@ -69,9 +69,6 @@ mcp.json                     # Agent Plugins MCP config (streamable-http)
   marketplace.json           # Cursor marketplace catalog
   mcp.json                   # Cursor MCP config (type: http, placement: server)
 POWER.md
-icon.png
-assets/
-  logo.png                   # 1024x1024 logo for the Claude Code and Cursor manifests
 skills/
   rawtree/
     SKILL.md
@@ -155,9 +152,9 @@ Power to RawTree's hosted Streamable HTTP MCP server at
 authentication. No API keys or authorization headers are stored in this
 repository.
 
-The repository also includes `icon.png`, RawTree's branded Power asset. Kiro's
+The repository also includes RawTree's branded Power icon. Kiro's
 custom GitHub and local Power imports currently use a generic placeholder icon;
-the asset is available for registry curation or a local Kiro registry entry.
+the icon is available for registry curation or a local Kiro registry entry.
 
 For local MCP development, continue to use the setup in the
 [`rawtree-mcp` repository](https://github.com/rawtreedb/rawtree-mcp), which
