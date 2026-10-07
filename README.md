@@ -69,9 +69,6 @@ mcp.json                     # Agent Plugins MCP config (streamable-http)
   marketplace.json           # Cursor marketplace catalog
   mcp.json                   # Cursor MCP config (type: http, placement: server)
 POWER.md
-icon.png
-assets/
-  logo.png                   # 1024x1024 logo for the Claude Code and Cursor manifests
 skills/
   rawtree/
     SKILL.md
@@ -155,13 +152,17 @@ Power to RawTree's hosted Streamable HTTP MCP server at
 authentication. No API keys or authorization headers are stored in this
 repository.
 
-The repository also includes `icon.png`, RawTree's branded Power asset. Kiro's
+The repository also includes RawTree's branded Power icon. Kiro's
 custom GitHub and local Power imports currently use a generic placeholder icon;
-the asset is available for registry curation or a local Kiro registry entry.
+the icon is available for registry curation or a local Kiro registry entry.
 
 For local MCP development, continue to use the setup in the
 [`rawtree-mcp` repository](https://github.com/rawtreedb/rawtree-mcp), which
 supports both stdio and a local HTTP server.
+
+## Network and Install Disclosure
+
+The plugin itself runs no code. It bundles a skill (Markdown) and an MCP configuration that connects to `https://mcp.rawtree.com/mcp` using OAuth with RawTree. The skill's CLI reference (`skills/rawtree/references/cli.md`) documents an optional install command for the RawTree CLI, `curl -fsSL https://rawtree.com/install.sh | bash`, which downloads and runs the installer script published by RawTree at `rawtree.com`. The skill tells agents to run it only when `rtree` is unavailable and installation is within the user's scope. The plugin never runs it automatically.
 
 ## Support
 
