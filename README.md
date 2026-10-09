@@ -1,6 +1,6 @@
 # RawTree Agent Skills
 
-A skill and hosted MCP server for working with [RawTree](https://rawtree.com), following the [Agent Skills](https://agentskills.io) format. Available as a plugin for Cursor, Claude Code, Codex, and any [Agent Plugins](https://agent-plugins.org) client, and as a Kiro Power. Includes RawTree's hosted MCP server for tool access.
+A skill and hosted MCP server for working with [RawTree](https://rawtree.com), following the [Agent Skills](https://agentskills.io) format. Available as a plugin for Cursor, Claude Code, Codex, Devin, and any [Agent Plugins](https://agent-plugins.org) client, and as a Kiro Power. Includes RawTree's hosted MCP server for tool access.
 
 ## Install
 
@@ -31,6 +31,19 @@ codex plugin add rawtree@rawtree
 ```
 
 In the Codex app, you can also use **Add marketplace** with this repository's GitHub URL, then select RawTree from the added source. Authenticate the bundled MCP connection when prompted and start a new task to use the plugin.
+
+### Devin
+
+In Devin Cloud, open **Customize → Plugins → Personal → Add plugin → From repository** and enter `https://github.com/rawtreedb/agent-skills`. Once indexing finishes, select **Connect MCP** and complete RawTree's OAuth authorization. Start a new session to use the plugin.
+
+For Devin CLI, when plugins are enabled by your organization:
+
+```bash
+devin plugins install rawtreedb/agent-skills
+devin mcp login rawtree
+```
+
+Devin loads the existing Claude plugin manifest, the bundled MCP configuration, and the shared RawTree skill. Invoke the skill with `/rawtree:rawtree`. See [Devin's plugin documentation](https://docs.devin.ai/cli/extensibility/plugins/overview).
 
 ### Grok Bot and Grok Build
 
@@ -115,8 +128,11 @@ This repository follows the [Agent Plugins](https://agent-plugins.org) open stan
 - **Cursor**: `.cursor-plugin/`
 - **Claude Code**: `.claude-plugin/` and `.mcp.json`
 - **Codex**: root `plugin.json` and `mcp.json`, catalog at `.agents/plugins/marketplace.json`
+- **Devin**: reuses `.claude-plugin/plugin.json`, `.mcp.json`, and `skills/`
 
 The catalogs point at the plugin at the repository root. No separate copy of the plugin is needed.
+
+Contributor guidance lives in `skills/AGENTS.md`, scoped to skill editing. Keep it out of the plugin root: Devin injects a root `AGENTS.md` into every session as an always-on rule.
 
 Each platform gets its own MCP file because the formats differ: the root `mcp.json` must stay valid against the Agent Plugins schema (`type: streamable-http`, no extra fields), Claude Code reads `.mcp.json` (`type: http`), and Cursor's `.cursor-plugin/plugin.json` points at `.cursor-plugin/mcp.json`, which adds `"placement": "server"`. All three point at `https://mcp.rawtree.com/mcp`. Keep the versions in `plugin.json`, `.claude-plugin/plugin.json`, and `.cursor-plugin/plugin.json` in sync.
 
