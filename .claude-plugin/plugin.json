@@ -5,8 +5,8 @@
   "version": "0.3.1",
   "description": "Ingest JSON events, run read-only SQL, and inspect logs in RawTree. Connects to the hosted RawTree MCP server (OAuth) and bundles the RawTree skill. Requires a RawTree account.",
   "author": {
-    "name": "gnzjgo",
-    "email": "gonzalo@tinybird.co"
+    "name": "RawTree",
+    "email": "teamrt@rawtree.com"
   },
   "homepage": "https://rawtree.com/docs/reference/mcp",
   "repository": "https://github.com/rawtreedb/agent-skills",

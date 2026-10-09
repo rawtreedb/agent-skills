@@ -7,8 +7,8 @@
   },
   "description": "Ingest JSON events, query them with read-only SQL, and inspect logs in RawTree, the schema-free OLAP database for agents. Connects to RawTree's hosted MCP server and bundles the official RawTree skill. Requires a RawTree account.",
   "author": {
-    "name": "gnzjgo",
-    "email": "gonzalo@tinybird.co"
+    "name": "RawTree",
+    "email": "teamrt@rawtree.com"
   },
   "homepage": "https://rawtree.com",
   "repository": "https://github.com/rawtreedb/agent-skills",
