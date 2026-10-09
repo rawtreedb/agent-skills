@@ -3,8 +3,8 @@
   "name": "rawtree",
   "description": "RawTree plugins for Claude Code",
   "owner": {
-    "name": "gnzjgo",
-    "email": "gonzalo@tinybird.co"
+    "name": "RawTree",
+    "email": "teamrt@rawtree.com"
   },
   "plugins": [
     {
