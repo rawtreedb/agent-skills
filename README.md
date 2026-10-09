@@ -132,8 +132,6 @@ This repository follows the [Agent Plugins](https://agent-plugins.org) open stan
 
 The catalogs point at the plugin at the repository root. No separate copy of the plugin is needed.
 
-Contributor guidance lives in `skills/AGENTS.md`, scoped to skill editing. Keep it out of the plugin root: Devin injects a root `AGENTS.md` into every session as an always-on rule.
-
 Each platform gets its own MCP file because the formats differ: the root `mcp.json` must stay valid against the Agent Plugins schema (`type: streamable-http`, no extra fields), Claude Code reads `.mcp.json` (`type: http`), and Cursor's `.cursor-plugin/plugin.json` points at `.cursor-plugin/mcp.json`, which adds `"placement": "server"`. All three point at `https://mcp.rawtree.com/mcp`. Keep the versions in `plugin.json`, `.claude-plugin/plugin.json`, and `.cursor-plugin/plugin.json` in sync.
 
 ### OpenAI package
