@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "rawtree",
   "displayName": "RawTree",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Ingest JSON events, run read-only SQL, and inspect logs in RawTree. Connects to the hosted RawTree MCP server (OAuth) and bundles the RawTree skill. Requires a RawTree account.",
   "author": {
     "name": "gnzjgo",
