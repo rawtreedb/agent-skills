@@ -1,7 +1,7 @@
 {
   "name": "rawtree",
   "displayName": "RawTree",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "minClientVersions": {
     "cursor": "3.13.0"
   },
@@ -29,7 +29,12 @@
     "mcp"
   ],
   "category": "integrations",
-  "tags": ["rawtree", "database", "analytics", "mcp"],
+  "tags": [
+    "rawtree",
+    "database",
+    "analytics",
+    "mcp"
+  ],
   "skills": "./skills/",
   "mcpServers": "./.cursor-plugin/mcp.json"
 }
