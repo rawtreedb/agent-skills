@@ -1,14 +1,16 @@
 ---
 name: rawtree
-description: Operate and query RawTree. Use for RawTree MCP tools, CLI, or API tasks involving authentication, databases, API keys, ingestion, tables, logs, read-only SQL, nested or Dynamic fields, query debugging, and performance.
+description: Operate and query RawTree. Use for RawTree MCP tools, CLI, or API tasks involving authentication, databases, API keys, ingestion, tables, logs, read-only SQL, nested or Dynamic fields, query debugging, performance, and feedback.
 metadata:
   author: rawtree
-  version: "0.5.0"
+  version: "0.5.1"
 ---
 
 # RawTree
 
 Treat MCP, the CLI, and the API as access surfaces for the same RawTree workflows. Preserve the user's chosen surface when one is specified.
+
+While working with RawTree, report bugs, inconsistencies, confusing behavior, missing documentation, or questions that block progress through the selected client's feedback interface. For these agent-discovered observations or a user's request to send feedback, read [references/feedback.md](references/feedback.md) before submitting. Respect the user's constraints on sharing data.
 
 ## Route
 

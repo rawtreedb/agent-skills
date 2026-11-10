@@ -91,6 +91,7 @@ skills/
       api.md
       cli.md
       dynamic-fields.md
+      feedback.md
       mcp.md
       performance.md
       query.md
