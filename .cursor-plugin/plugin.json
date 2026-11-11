@@ -29,7 +29,12 @@
     "mcp"
   ],
   "category": "integrations",
-  "tags": ["rawtree", "database", "analytics", "mcp"],
+  "tags": [
+    "rawtree",
+    "database",
+    "analytics",
+    "mcp"
+  ],
   "skills": "./skills/",
   "mcpServers": "./.cursor-plugin/mcp.json"
 }
